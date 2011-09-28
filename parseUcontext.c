@@ -23,15 +23,19 @@ int main(int argc, char **argv)
   assert(__WORDSIZE == 32); // Do this project on a 32-bit x86 linux machine
   printf("NGREG %d\n", NGREG);
   assert(NGREG == 19);  // Do this project on a 32-bit x86 linux machine
-
+  
+  //sets err equal to ?. The struct stored at the address of mycontext?
   err = getcontext(&mycontext);
   assert(!err);
 
-  printf("A ucontext_t is %d bytes\n", sizeof(mycontext);
-  assert(0); // TBD: Fill in ucontext size above. Hint: use sizeof().
+  printf("A ucontext_t is %d bytes\n", sizeof(mycontext));
+  assert(sizeof(ucontext_t)==sizeof(mycontext)); // TBD: Fill in ucontext size above. Hint: use sizeof().
+  //check
+  printf("check 1\n");
 
+  //why does probeUCStack have a dummy argument?
   unsigned int anotherSample = probeUCStack("Dummy argument.");
-
+  printf("check 2\n");
   /* 
    * Now, look inside of the ucontext you just saved.
    *
@@ -99,6 +103,8 @@ int main(int argc, char **argv)
 unsigned int 
 probeUCStack(char *str)
 {
-  assert(0); /* Write code for this function */
+  //assert(0); /* Write code for this function */
+  //get context 
+  getcontext(str); 
   return 0xFFFFFFFF;
 }
