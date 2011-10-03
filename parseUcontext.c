@@ -33,7 +33,6 @@ int main(int argc, char **argv)
   //check
   printf("check 1\n");
 
-  //why does probeUCStack have a dummy argument?
   unsigned int anotherSample = probeUCStack("Dummy argument.");
   printf("check 2\n");
   /* 
@@ -104,7 +103,17 @@ unsigned int
 probeUCStack(char *str)
 {
   //assert(0); /* Write code for this function */
-  //get context 
-  getcontext(str); 
-  return 0xFFFFFFFF;
+  //allocate memory for context
+  ucontext_t probeContext;
+  int probe;
+  //get context
+  probe = getcontext(&probeContext);
+  assert(!probe);
+  
+
+  return probeContext.uc_stack.ss_sp; 
+//  getcontext(str); 
+//  return 0xFFFFFFFF;
+    
+
 }
