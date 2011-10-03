@@ -50,13 +50,14 @@ int main(int argc, char **argv)
   printf("The memory address of the function main() is 0x%x\n", (unsigned int)-1);
  
   /*
-   * The memory address of the program counter(EIP) is stored in the
+   * the overall state of the process, with register contents and 
+   * stack pointer , etc is stored in
    * mcontex_t uc_mcontext data member of the ucontext struct 
+   * 
    * -ckarrs
    */
    
-   unsigned int instructionPointer=(unsigned int)mycontext.uc_mcontext.ss.eip;
-   printf("The memory address of the program counter (EIP) saved in mycontext is 0x%x\n",instructionPointer);
+   printf("The memory address of the program counter (EIP) saved in mycontext is 0x%x\n",REG_EIP);
 
   /*
    * Now, think about stacks. 
