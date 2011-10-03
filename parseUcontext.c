@@ -116,12 +116,18 @@ probeUCStack(char *str)
   ucontext_t probeContext;
   int probe;
   int ucStackPointer;
+  //int mainStackPointer;
   //get context
   probe = getcontext(&probeContext);
   assert(!probe);
   
   ucStackPointer=(int)probeContext.uc_stack.ss_sp;
-
+  /*mainStackPointer=(int)myContext.uc_stack.ss_sp;
+  *if(ucStackPointer>mainStackPointer)
+  *{
+  *   printf("ucStackPointer is at the top of the stack because the stack grows down.");
+  *}
+  */
   return ucStackPointer; 
 //  getcontext(str); 
 //  return 0xFFFFFFFF;
