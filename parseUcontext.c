@@ -106,12 +106,14 @@ probeUCStack(char *str)
   //allocate memory for context
   ucontext_t probeContext;
   int probe;
+  int ucStackPointer;
   //get context
   probe = getcontext(&probeContext);
   assert(!probe);
   
+  ucStackPointer=(int)probeContext.uc_stack.ss_sp;
 
-  return probeContext.uc_stack.ss_sp; 
+  return ucStackPointer; 
 //  getcontext(str); 
 //  return 0xFFFFFFFF;
     
