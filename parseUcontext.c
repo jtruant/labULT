@@ -85,7 +85,7 @@ int main(int argc, char **argv)
   printf("The memory address of the argument argc is 0x%x\n", (unsigned int)-1);
   printf("The value of ucontext_t.uc_stack is 0x%x\n", (unsigned int)mycontext.uc_stack.ss_sp);
   printf("The value of anotherSample is 0x%x\n", anotherSample);
-  printf("The stack pointer stored as one of the registers (ESP) in uc_mcontext is 0x%x\n", (unsigned int)-1);
+  printf("The stack pointer stored as one of the registers (ESP) in uc_mcontext is 0x%x\n", (unsigned int)REG_ESP);
   printf("The stack pointer stored as another one of the `registers` (UESP) in uc_mcontext is 0x%x\n", (unsigned int)-1);
 
 
