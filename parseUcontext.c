@@ -34,7 +34,9 @@ int main(int argc, char **argv)
   printf("check 1\n");
 
   unsigned int anotherSample = probeUCStack("Dummy argument.");
+  //get the stack pointer from context stored in mycontext
   printf("check 2\n");
+  
   /* 
    * Now, look inside of the ucontext you just saved.
    *
@@ -57,8 +59,8 @@ int main(int argc, char **argv)
    * -ckarrs
    */
    
-   printf("The memory address of the program counter (EIP) saved in mycontext is 0x%x\n",REG_EIP);
-
+   printf("The memory address of the program counter (EIP) saved in mycontext is 0x%x\n", REG_EIP);
+   //printf("Or maybe it is 0x%x\n", gregset_t[14]);
   /*
    * Now, think about stacks. 
    *
@@ -86,7 +88,7 @@ int main(int argc, char **argv)
   printf("The value of ucontext_t.uc_stack is 0x%x\n", (unsigned int)mycontext.uc_stack.ss_sp);
   printf("The value of anotherSample is 0x%x\n", anotherSample);
   printf("The stack pointer stored as one of the registers (ESP) in uc_mcontext is 0x%x\n", (unsigned int)REG_ESP);
-  printf("The stack pointer stored as another one of the `registers` (UESP) in uc_mcontext is 0x%x\n", (unsigned int)-1);
+  printf("The stack pointer stored as another one of the `registers` (UESP) in uc_mcontext is 0x%x\n", (unsigned int)REG_ESP);
 
 
   printf("The number of bytes pushed onto the stack between argc and err was 0x%x\n", (unsigned int)(0xFFFFFF));
@@ -122,15 +124,7 @@ probeUCStack(char *str)
   assert(!probe);
   
   ucStackPointer=(int)probeContext.uc_stack.ss_sp;
-  /*mainStackPointer=(int)myContext.uc_stack.ss_sp;
-  *if(ucStackPointer>mainStackPointer)
-  *{
-  *   printf("ucStackPointer is at the top of the stack because the stack grows down.");
-  *}
-  */
   return ucStackPointer; 
-//  getcontext(str); 
-//  return 0xFFFFFFFF;
     
 
 }
