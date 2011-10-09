@@ -10,7 +10,19 @@ typedef int Tid;
 
 typedef struct ThrdCtlBlk{
   /* ... Fill this in ... */
+  Tid tid;
+  ucontext_t threadContext;
+  ucontext_t *threadPointer;
 } ThrdCtlBlk;
+
+
+/*
+ * waiting queue of threads
+ */
+
+/*
+   ucontext_t ** ppThread;
+*/
 
 
 /*
@@ -30,6 +42,12 @@ static const Tid ULT_FAILED = -7;
 
 static inline int ULT_isOKRet(Tid ret){
   return (ret >= 0 ? 1 : 0);
+}
+
+stub(void(*root)(void*),void *arg)
+{
+	/*fill this in*/
+	
 }
 
 Tid ULT_CreateThread(void (*fn)(void *), void *parg);
