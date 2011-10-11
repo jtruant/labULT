@@ -28,7 +28,7 @@ int main(int argc, char **argv)
   err = getcontext(&mycontext);
   assert(!err);
 
-  printf("A ucontext_t is %d bytes\n", sizeof(mycontext));
+  printf("A ucontext_t is %d bytes\n", sizeof(ucontext_t));
   assert(sizeof(ucontext_t)==sizeof(mycontext)); // TBD: Fill in ucontext size above. Hint: use sizeof().
   //check
   printf("check 1\n");
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
   /*
    * First, think about program counters (called eip in x86)
    */
-  printf("The memory address of the function main() is 0x%x\n", (unsigned int)-1);
+  printf("The memory address of the function main() is 0x%x\n", (unsigned int)(&main));
  
   /*
    * the overall state of the process, with register contents and 
