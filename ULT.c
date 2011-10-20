@@ -6,7 +6,8 @@
 #endif /* __USE_GNU */
 #include <ucontext.h>
 #include "ULT.h"
-ThrdCtlBlk **queueHead;
+struct ThrdCtlBlk **queueHead;
+Tid universalTid=0;
 
 
 Tid 
@@ -35,11 +36,12 @@ Tid ULT_Yield(Tid wantTid)
   getcontext(&currThread);
   /*build TCB*/
   struct ThrdCtlBlk *currBlock;
+  /*allocate memory */
   currBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
-  currBlock.threadContext=currThread;
-  currBlock.tid=0;
+  currBlock->threadContext=currThread;
+  currBlock->tid=universalTid;
   /*stick thread(TCB) on the ready queue*/
-  currBlock.tcbPointer=*queueHead;  
+  currBlock->tcbPointerTail=*queueHead;  
   *queueHead=currBlock;
   }
   /*change instruction pointer*/
@@ -55,7 +57,30 @@ Tid ULT_DestroyThread(Tid tid)
   return ULT_FAILED;
 }
 
+ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
+{
+       // struct ThrdCtlBlk *tempBlock;
+       struct ThrdCtlBlk *tempBlock;
+       /*allocate memory */
+       //tempBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
+       tempBlock=*queueHead;
 
+        if(*tempBlock!=NULL)
+        {
+	  while(tempBlock!=NULL)
+          {
+        	if(tempBlock->tid==searchTid)
+		{
+			return tempBlock; 
+		}
+    		else
+		{
+			tempBlock=tempBlock->tcbPointerTail;
+		}
+          }
+
+        }
+}
 
 
 

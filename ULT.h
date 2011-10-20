@@ -1,6 +1,7 @@
 #ifndef _ULT_H_
 #define _ULT_H_
 #include <ucontext.h>
+#include <stdlib.h>
 
 typedef int Tid;
 #define ULT_MAX_THREADS 1024
@@ -8,18 +9,13 @@ typedef int Tid;
 
 
 
-typedef struct ThrdCtlBlk
-{
+typedef struct ThrdCtlBlk{
+  /* ... Fill this in ... */
   Tid tid;
   ucontext_t threadContext;
-  struct ThrdCtlBlk *tcbPointer;
+  struct ThrdCtlBlk *tcbPointerHead;
+  struct ThrdCtlBlk *tcbPointerTail;
 } ThrdCtlBlk;
-
-
-/*
- * waiting queue of threads
-   ucontext_t ** ppThread;
-*/
 
 
 /*
@@ -37,22 +33,16 @@ static const Tid ULT_NOMORE = -5;
 static const Tid ULT_NOMEMORY = -6;
 static const Tid ULT_FAILED = -7;
 
-static inline int ULT_isOKRet(Tid ret)
-{
+static inline int ULT_isOKRet(Tid ret){
   return (ret >= 0 ? 1 : 0);
 }
 
-/*
-stub(void(*root)(void*),void *arg)
+int stub(void(*root)(void*),void *arg)
 {
-	fill this in
-	Tid ret;
-	root(arg); //call root fucntion
-	ret = ULT_DestroyThread(ULT_SELF);
-	assert(ret == ULT_NONE); //we should only get here if we are the last thread
-	exit(0); //all threads are done so process should exit	
+	/*fill this in*/
+	return 0;
 }
-*/
+
 Tid ULT_CreateThread(void (*fn)(void *), void *parg);
 Tid ULT_Yield(Tid tid);
 Tid ULT_DestroyThread(Tid tid);
