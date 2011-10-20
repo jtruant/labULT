@@ -30,20 +30,18 @@ Tid ULT_Yield(Tid wantTid)
   /*assert(0);  TBD */
   /*return ULT_FAILED;*/
   ucontext_t currThread;
- 
-  if(wantTid==-2)
-  { 
   getcontext(&currThread);
+  
   /*build TCB*/
   struct ThrdCtlBlk *currBlock;
   /*allocate memory */
   currBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
   currBlock->threadContext=currThread;
   currBlock->tid=universalTid;
+
   /*stick thread(TCB) on the ready queue*/
   currBlock->tcbPointerTail=*queueHead;  
   *queueHead=currBlock;
-  }
   /*change instruction pointer*/
   /*decide on new thread to run*/
   
@@ -57,7 +55,7 @@ Tid ULT_DestroyThread(Tid tid)
   return ULT_FAILED;
 }
 
-ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
+struct ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
 {
        // struct ThrdCtlBlk *tempBlock;
        struct ThrdCtlBlk *tempBlock;
@@ -65,13 +63,11 @@ ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
        //tempBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
        tempBlock=*queueHead;
 
-        if(*tempBlock!=NULL)
-        {
 	  while(tempBlock!=NULL)
           {
         	if(tempBlock->tid==searchTid)
 		{
-			return tempBlock; 
+			return *tempBlock; 
 		}
     		else
 		{
@@ -79,7 +75,7 @@ ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
 		}
           }
 
-        }
+           	
 }
 
 
