@@ -8,7 +8,7 @@
 #endif /* __USE_GNU */
 #include <ucontext.h>
 #include "ULT.h"
-struct ThrdCtlBlk **queueHead;
+struct ThrdCtlBlk *queueHead=NULL;
 //number of existing threads
 Tid universalTid=0;
 //currently running thread
@@ -31,7 +31,7 @@ Tid ULT_Yield(Tid wantTid)
        /*The tid does not correspond to a valid thread*/ 
      return ULT_INVALID; 
   }
-  else if((queueHead==NULL) && (wantTid=ULT_ANY))//if queue empty and ULT_any then no-op
+  else if((queueHead==NULL) && (wantTid==ULT_ANY))//if queue empty and ULT_any then no-op
   {
        return ULT_NONE;
   
@@ -50,19 +50,24 @@ Tid ULT_Yield(Tid wantTid)
   /*allocate memory */
   currBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
   currBlock->tid=universalTid;
+  currBlock->tcbPointerTail=NULL;
+  currBlock->tcbPointerHead=NULL;
   /*get context and set the context of the tcb to that context*/ 
   getcontext(&currThread);
   currBlock->threadContext=currThread;
 
   /*stick thread(TCB) on the ready queue*/
-  currBlock->tcbPointerTail=*queueHead;  
-  *queueHead=currBlock;
+  if(queueHead!=NULL)
+  {
+  currBlock->tcbPointerTail=queueHead;  
+  }
+  queueHead=currBlock;
   /*change instruction pointer TBD*/
   /*decide on new thread to run*/
   struct ThrdCtlBlk *setBlock;
   setBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
   
-  setBlock=fromQueue(wantTid,queueHead); 
+  setBlock=fromQueue(wantTid,&queueHead); 
   currThread=setBlock->threadContext;
   setcontext(&currThread);
   printf("Jump barrier \n");
