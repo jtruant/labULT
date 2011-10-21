@@ -36,8 +36,11 @@ Tid ULT_Yield(Tid wantTid)
        return ULT_NONE;
   
   }
-  else 
+  else if(wantTid == ULT_SELF)
   {
+	wantTid = runningThread;
+  }
+   
   /*assert(0);  TBD */
   /*return ULT_FAILED;*/
   ucontext_t currThread;
@@ -67,7 +70,7 @@ Tid ULT_Yield(Tid wantTid)
   
   return runningThread;
   
-  }
+  
  
 }
 
