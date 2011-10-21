@@ -31,19 +31,25 @@ Tid ULT_Yield(Tid wantTid)
        /*The tid does not correspond to a valid thread*/ 
      return ULT_INVALID; 
   }
-  else
+  else if((queueHead==NULL) && (wantTid=ULT_ANY))//if queue empty and ULT_any then no-op
+  {
+       return ULT_NONE;
+  
+  }
+  else 
   {
   /*assert(0);  TBD */
   /*return ULT_FAILED;*/
   ucontext_t currThread;
-  getcontext(&currThread);
-  
+
   /*build TCB*/
   struct ThrdCtlBlk *currBlock;
   /*allocate memory */
   currBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
-  currBlock->threadContext=currThread;
   currBlock->tid=universalTid;
+  /*get context and set the context of the tcb to that context*/ 
+  getcontext(&currThread);
+  currBlock->threadContext=currThread;
 
   /*stick thread(TCB) on the ready queue*/
   currBlock->tcbPointerTail=*queueHead;  

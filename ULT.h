@@ -37,12 +37,13 @@ static inline int ULT_isOKRet(Tid ret){
   return (ret >= 0 ? 1 : 0);
 }
 
+/*
 int stub(void(*root)(void*),void *arg)
 {
-	/*fill this in*/
+	x*fill this in*
 	return 0;
 }
-
+*/
 Tid ULT_CreateThread(void (*fn)(void *), void *parg);
 Tid ULT_Yield(Tid tid);
 Tid ULT_DestroyThread(Tid tid);
