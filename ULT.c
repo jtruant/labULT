@@ -1,5 +1,7 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 /* We want the extra information from these definitions */
 #ifndef __USE_GNU
 #define __USE_GNU
@@ -7,8 +9,11 @@
 #include <ucontext.h>
 #include "ULT.h"
 struct ThrdCtlBlk **queueHead;
+//number of existing threads
 Tid universalTid=0;
-
+//currently running thread
+Tid runningThread=0;
+struct ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead);
 
 Tid 
 ULT_CreateThread(void (*fn)(void *), void *parg)
@@ -26,7 +31,8 @@ Tid ULT_Yield(Tid wantTid)
        /*The tid does not correspond to a valid thread*/ 
      return ULT_INVALID; 
   }
-  
+  else
+  {
   /*assert(0);  TBD */
   /*return ULT_FAILED;*/
   ucontext_t currThread;
@@ -42,10 +48,18 @@ Tid ULT_Yield(Tid wantTid)
   /*stick thread(TCB) on the ready queue*/
   currBlock->tcbPointerTail=*queueHead;  
   *queueHead=currBlock;
-  /*change instruction pointer*/
+  /*change instruction pointer TBD*/
   /*decide on new thread to run*/
-  
-
+  struct ThrdCtlBlk *setBlock;
+  setBlock=(struct ThrdCtlBlock*)malloc(sizeof(ThrdCtlBlk));
+  *setBlock=fromQueue(wantTid,queueHead);
+  currThread=setBlock->threadContext;
+  setcontext(&currThread);
+  printf("Jump barrier \n");
+  runningThread=setBlock->tid;
+  return runningThread;
+  }
+ 
 }
 
 
@@ -74,7 +88,8 @@ struct ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
 			tempBlock=tempBlock->tcbPointerTail;
 		}
           }
-
+  //this will not be a correct tcb. needs fix		
+  return *tempBlock;
            	
 }
 
