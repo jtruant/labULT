@@ -13,7 +13,7 @@ struct ThrdCtlBlk **queueHead;
 Tid universalTid=0;
 //currently running thread
 Tid runningThread=0;
-struct ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead);
+struct ThrdCtlBlk *fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead);
 
 Tid 
 ULT_CreateThread(void (*fn)(void *), void *parg)
@@ -51,13 +51,16 @@ Tid ULT_Yield(Tid wantTid)
   /*change instruction pointer TBD*/
   /*decide on new thread to run*/
   struct ThrdCtlBlk *setBlock;
-  setBlock=(struct ThrdCtlBlock*)malloc(sizeof(ThrdCtlBlk));
-  *setBlock=fromQueue(wantTid,queueHead);
+  setBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
+  
+  setBlock=fromQueue(wantTid,queueHead); 
   currThread=setBlock->threadContext;
   setcontext(&currThread);
   printf("Jump barrier \n");
   runningThread=setBlock->tid;
+  
   return runningThread;
+  
   }
  
 }
@@ -69,19 +72,19 @@ Tid ULT_DestroyThread(Tid tid)
   return ULT_FAILED;
 }
 
-struct ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
+struct ThrdCtlBlk *fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
 {
        // struct ThrdCtlBlk *tempBlock;
        struct ThrdCtlBlk *tempBlock;
        /*allocate memory */
-       //tempBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
+       tempBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
        tempBlock=*queueHead;
 
 	  while(tempBlock!=NULL)
           {
         	if(tempBlock->tid==searchTid)
 		{
-			return *tempBlock; 
+			return tempBlock; 
 		}
     		else
 		{
@@ -89,7 +92,7 @@ struct ThrdCtlBlk fromQueue(Tid searchTid,struct ThrdCtlBlk **queueHead)
 		}
           }
   //this will not be a correct tcb. needs fix		
-  return *tempBlock;
+  return tempBlock;
            	
 }
 
