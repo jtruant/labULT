@@ -54,6 +54,9 @@ Tid ULT_Yield(Tid wantTid)
   currBlock->tcbPointerHead=NULL;
   /*get context and set the context of the tcb to that context*/ 
   getcontext(&currThread);
+  
+  /*change instruction pointer JUMP*/
+  currThread.uc_mcontext.gregs[REG_EIP]=currThread.uc_mcontext.gregs[REG_EIP]+162;
   currBlock->threadContext=currThread;
 
   /*stick thread(TCB) on the ready queue*/
@@ -62,7 +65,7 @@ Tid ULT_Yield(Tid wantTid)
   currBlock->tcbPointerTail=queueHead;  
   }
   queueHead=currBlock;
-  /*change instruction pointer TBD*/
+  
   /*decide on new thread to run*/
   struct ThrdCtlBlk *setBlock;
   setBlock=(struct ThrdCtlBlk*)malloc(sizeof(ThrdCtlBlk));
